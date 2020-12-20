@@ -1,1 +1,1 @@
-# covid-19-social-metrics
+# human-dev-by-social-metrics
