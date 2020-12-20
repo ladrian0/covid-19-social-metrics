@@ -1,0 +1,192 @@
+continent,country,human_development_index
+Asia,Afghanistan,0.498
+Europe,Albania,0.785
+Africa,Algeria,0.754
+Europe,Andorra,0.858
+Africa,Angola,0.581
+North America,Antigua and Barbuda,0.78
+South America,Argentina,0.825
+Asia,Armenia,0.755
+Oceania,Australia,0.939
+Europe,Austria,0.908
+Asia,Azerbaijan,0.757
+North America,Bahamas,0.807
+Asia,Bahrain,0.846
+Asia,Bangladesh,0.608
+North America,Barbados,0.8
+Europe,Belarus,0.808
+Europe,Belgium,0.916
+North America,Belize,0.708
+Africa,Benin,0.515
+Asia,Bhutan,0.612
+South America,Bolivia,0.693
+Europe,Bosnia and Herzegovina,0.768
+Africa,Botswana,0.717
+South America,Brazil,0.759
+Asia,Brunei,0.853
+Europe,Bulgaria,0.813
+Africa,Burkina Faso,0.423
+Africa,Burundi,0.417
+Asia,Cambodia,0.582
+Africa,Cameroon,0.556
+North America,Canada,0.926
+Africa,Cape Verde,0.654
+Africa,Central African Republic,0.367
+Africa,Chad,0.404
+South America,Chile,0.843
+Asia,China,0.752
+South America,Colombia,0.747
+Africa,Comoros,0.503
+Africa,Congo,0.606
+North America,Costa Rica,0.794
+Africa,Cote d'Ivoire,0.492
+Europe,Croatia,0.831
+North America,Cuba,0.777
+Europe,Cyprus,0.869
+Europe,Czechia,0.888
+Africa,Democratic Republic of Congo,0.457
+Europe,Denmark,0.929
+Africa,Djibouti,0.476
+North America,Dominica,0.715
+North America,Dominican Republic,0.736
+South America,Ecuador,0.752
+Africa,Egypt,0.696
+North America,El Salvador,0.674
+Africa,Equatorial Guinea,0.591
+Africa,Eritrea,0.44
+Europe,Estonia,0.871
+Africa,Eswatini,0.588
+Africa,Ethiopia,0.463
+Oceania,Fiji,0.741
+Europe,Finland,0.92
+Europe,France,0.901
+Africa,Gabon,0.702
+Africa,Gambia,0.46
+Asia,Georgia,0.78
+Europe,Germany,0.936
+Africa,Ghana,0.592
+Europe,Greece,0.87
+North America,Grenada,0.772
+North America,Guatemala,0.65
+Africa,Guinea,0.459
+Africa,Guinea-Bissau,0.455
+South America,Guyana,0.654
+North America,Haiti,0.498
+North America,Honduras,0.617
+Europe,Hungary,0.838
+Europe,Iceland,0.935
+Asia,India,0.64
+Asia,Indonesia,0.694
+NA,International,NA
+Asia,Iran,0.798
+Asia,Iraq,0.685
+Europe,Ireland,0.938
+Asia,Israel,0.903
+Europe,Italy,0.88
+North America,Jamaica,0.732
+Asia,Japan,0.909
+Asia,Jordan,0.735
+Asia,Kazakhstan,0.8
+Africa,Kenya,0.59
+Europe,Kosovo,NA
+Asia,Kuwait,0.803
+Asia,Kyrgyzstan,0.672
+Asia,Laos,0.601
+Europe,Latvia,0.847
+Asia,Lebanon,0.757
+Africa,Lesotho,0.52
+Africa,Liberia,0.435
+Africa,Libya,0.706
+Europe,Liechtenstein,0.916
+Europe,Lithuania,0.858
+Europe,Luxembourg,0.904
+Africa,Madagascar,0.519
+Africa,Malawi,0.477
+Asia,Malaysia,0.802
+Asia,Maldives,0.717
+Africa,Mali,0.427
+Europe,Malta,0.878
+Oceania,Marshall Islands,0.708
+Africa,Mauritania,0.52
+Africa,Mauritius,0.79
+North America,Mexico,0.774
+Europe,Moldova,0.7
+Europe,Monaco,NA
+Asia,Mongolia,0.741
+Europe,Montenegro,0.814
+Africa,Morocco,0.667
+Africa,Mozambique,0.437
+Asia,Myanmar,0.578
+Africa,Namibia,0.647
+Asia,Nepal,0.574
+Europe,Netherlands,0.931
+Oceania,New Zealand,0.917
+North America,Nicaragua,0.658
+Africa,Niger,0.354
+Africa,Nigeria,0.532
+Europe,North Macedonia,0.757
+Europe,Norway,0.953
+Asia,Oman,0.821
+Asia,Pakistan,0.562
+Asia,Palestine,0.686
+North America,Panama,0.789
+Oceania,Papua New Guinea,0.544
+South America,Paraguay,0.702
+South America,Peru,0.75
+Asia,Philippines,0.699
+Europe,Poland,0.865
+Europe,Portugal,0.847
+Asia,Qatar,0.856
+Europe,Romania,0.811
+Europe,Russia,0.816
+Africa,Rwanda,0.524
+North America,Saint Kitts and Nevis,0.778
+North America,Saint Lucia,0.747
+North America,Saint Vincent and the Grenadines,0.723
+Oceania,Samoa,0.713
+Europe,San Marino,NA
+Africa,Sao Tome and Principe,0.589
+Asia,Saudi Arabia,0.853
+Africa,Senegal,0.505
+Europe,Serbia,0.787
+Africa,Seychelles,0.797
+Africa,Sierra Leone,0.419
+Asia,Singapore,0.932
+Europe,Slovakia,0.855
+Europe,Slovenia,0.896
+Oceania,Solomon Islands,0.546
+Africa,Somalia,NA
+Africa,South Africa,0.699
+Asia,South Korea,0.903
+Africa,South Sudan,0.388
+Europe,Spain,0.891
+Asia,Sri Lanka,0.77
+Africa,Sudan,0.502
+South America,Suriname,0.72
+Europe,Sweden,0.933
+Europe,Switzerland,0.944
+Asia,Syria,0.536
+Asia,Taiwan,NA
+Asia,Tajikistan,0.65
+Africa,Tanzania,0.538
+Asia,Thailand,0.755
+Asia,Timor,0.625
+Africa,Togo,0.503
+North America,Trinidad and Tobago,0.784
+Africa,Tunisia,0.735
+Asia,Turkey,0.791
+Africa,Uganda,0.516
+Europe,Ukraine,0.751
+Asia,United Arab Emirates,0.863
+Europe,United Kingdom,0.922
+North America,United States,0.924
+South America,Uruguay,0.804
+Asia,Uzbekistan,0.71
+Oceania,Vanuatu,0.603
+Europe,Vatican,NA
+South America,Venezuela,0.761
+Asia,Vietnam,0.694
+NA,World,NA
+Asia,Yemen,0.452
+Africa,Zambia,0.588
+Africa,Zimbabwe,0.535
