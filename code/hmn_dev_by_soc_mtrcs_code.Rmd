@@ -1,0 +1,368 @@
+---
+title: "Human Development Index by Social Metrics"
+author: "Leiny Adriano"
+date: "12/18/2020"
+output: 
+  html_document:
+    toc:  true
+    toc_float:  true
+    code_folding: hide
+---
+
+This project is hosted on [link](https://github.com/ladrian0/human-development-by-social-metrics)
+
+### Data
+
+
+```{r, message = F, warning = F, output = "hide"}
+# Load libraries
+library(tidyverse)
+library(tidyr)
+library(ggplot2)
+library(ggrepel)
+library(gridExtra)
+library(stargazer)
+library(ggfortify)
+```
+
+```{r, message = F, warning = F, output = "hide"}
+# Load datasets
+human_dev <- read_csv("https://raw.githubusercontent.com/ladrian0/human-development-by-social-metrics/main/data/hmn-dev-index.csv")
+happiness <- read_csv("https://raw.githubusercontent.com/ladrian0/human-development-by-social-metrics/main/data/happiness-report-2019.csv")
+corruption <- read_csv("https://raw.githubusercontent.com/ladrian0/human-development-by-social-metrics/main/data/corruption-index.csv")
+gini <- read_csv("https://raw.githubusercontent.com/ladrian0/human-development-by-social-metrics/main/data/gini-coefficient.csv")
+```
+
+```{r, message = F, warning = F, output = "hide"}
+# Transform `human_dev` dataset
+names(human_dev)[names(human_dev) == 'human_development_index'] <- 
+  'hmn_dev_index'
+
+# Transform `happiness` dataset
+names(happiness)[names(happiness) == 'Country or region'] <- 'country'
+names(happiness)[names(happiness) == 'Score'] <- 'happiness_index'
+
+happiness <-
+  happiness %>%
+  select(country, happiness_index) %>%
+  arrange(country)
+
+# Transform `corruption` dataset
+names(corruption)[names(corruption) == 'Country'] <- 'country'
+names(corruption)[names(corruption) == 'Corruption Perceptions Index (CPI)'] <- 
+  'corruption_index'
+
+corruption <-
+  corruption %>%
+  select(country, corruption_index) %>%
+  arrange(country)
+
+# Transform `gini` dataset
+names(gini)[names(gini) == '2040'] <- 'gini_index'
+
+gini <-
+  gini %>%
+  select(country, gini_index) %>%
+  arrange(country)
+```
+
+```{r, message = F, warning = F, output = "hide"}
+# Merge datasets
+social_metrics <- 
+  left_join(human_dev, happiness, by = "country")
+social_metrics <- 
+  left_join(social_metrics, corruption, by = "country")
+social_metrics <-
+  left_join(social_metrics, gini, by = "country")
+```
+
+```{r, message = F, warning = F, output = "hide"}
+# Replace NA values with mean
+social_metrics  <- 
+  mutate(social_metrics, 
+         gini_index = ifelse(is.na(gini_index), 
+                             round(mean(gini_index, na.rm = T), 2),
+                             gini_index))
+social_metrics  <- 
+  mutate(social_metrics, 
+         hmn_dev_index = ifelse(is.na(hmn_dev_index),
+                                round(mean(hmn_dev_index, na.rm = T), 2),
+                                hmn_dev_index))
+social_metrics  <- 
+  mutate(social_metrics, 
+         happiness_index = ifelse(is.na(happiness_index), 
+                                 round(mean(happiness_index, na.rm = T), 2),
+                                 happiness_index))
+social_metrics  <- 
+  mutate(social_metrics, 
+         corruption_index = ifelse(is.na(corruption_index), 
+                                   round(mean(corruption_index, na.rm = T), 2),
+                                   corruption_index))
+```
+
+```{r, message = F, warning = F, output = "hide"}
+# Create data frame for regression model
+social_metrics <-
+  social_metrics %>%
+  filter(!country %in% c("International", "World")) %>%
+  mutate(hmn_dev_index = hmn_dev_index * 100) %>%
+  select(continent, country, hmn_dev_index, gini_index, 
+         happiness_index, corruption_index) %>%
+  arrange(country)
+
+# Create quantitative data frame for regression model
+social_metrics_num <- 
+  social_metrics %>%
+  select(-continent, -country)
+```
+
+
+### Exploratory Data Analysis
+
+```{r}
+summary(social_metrics)
+```
+
+
+```{r, message = F, warning = F, include = F}
+# Load ggplot theme
+ladriano_theme <- 
+  theme(plot.title = element_text(size = 16, 
+                                  face = "bold", 
+                                  color = "darkblue", 
+                                  hjust = 0.5),
+        plot.subtitle = element_text(size = 11, 
+                                     color = "black", 
+                                     hjust = 0.5),
+        plot.caption = element_text(size = 11, 
+                                    face = "italic",
+                                    hjust = 0.5),
+        plot.background = element_rect(fill = "white"),
+        panel.background = element_rect(fill = "white", 
+                                        color = NA),
+        panel.grid.minor = element_line(size = 0.5, 
+                                        color = "#BBBBBB"),
+        panel.grid.major = element_line(size = 0.5, 
+                                        color = "#ACACAC"),
+        axis.title = element_text(size = 12),
+        axis.text = element_text(size = 10, 
+                                 color = "black"),
+        axis.ticks = element_line(color = "#ACACAC"),
+        legend.title = element_text(size = 12),
+        legend.text = element_text(size = 10, 
+                                   color = "black"),
+        legend.position = "right",
+        legend.background = element_rect(fill = "white"),
+        strip.text = element_text(size = 12, 
+                                  face = "italic"),
+        strip.background = element_rect(fill = "white"))
+```
+
+```{r, message = F, warning = F, echo = F, fig.align = "center"}
+# Statistical analysis of human development index variable
+hmn_dev_bxplt <-
+  ggplot(social_metrics, aes(x = hmn_dev_index)) +
+  geom_boxplot() +
+  coord_flip() +
+  ggtitle("Human Development Index by Country") +
+  labs(x = "Human Development Index",
+       caption = "Figure 1") +
+  ladriano_theme
+
+hmn_dev_hist <-
+  ggplot(social_metrics, aes(x = hmn_dev_index)) +
+  geom_histogram(bins = 18,
+                 fill = "#DBDBDB",
+                 color = "darkblue") +
+  ggtitle("Global Human Development Index") +
+  labs(x = "Human Development Index",
+       y = "Count",
+       caption = "Figure 2") +
+  ladriano_theme
+
+# hmn_dev_bxplt
+# hmn_dev_hist
+
+grid.arrange(hmn_dev_bxplt, hmn_dev_hist, nrow = 2)
+```
+
+```{r, message = F, warning = F, include = F}
+# List of countries with min/max human development index
+countries <- c("Niger", "South Sudan", "China", 
+               "Paraguay", "Switzerland", "Norway")
+```
+
+```{r, message = F, warning = F, echo = F, fig.align = "center"}
+# Statistical analysis of Gini index variable
+gini_bxplt <-
+  ggplot(social_metrics, aes(x = gini_index)) +
+  geom_boxplot() +
+  coord_flip() +
+  ggtitle("Global Gini Index") +
+  labs(x = "Gini Index",
+       caption = "Figure 3") +
+  ladriano_theme
+
+gini_hist <-
+  ggplot(social_metrics, aes(x = gini_index)) +
+  geom_histogram(bins = 20,
+                 fill = "#DBDBDB",
+                 color = "darkblue") +
+  ggtitle("Global Gini Index") +
+  labs(x = "Human Development Index",
+       y = "Count",
+       caption = "Figure 4") +
+  ladriano_theme
+
+gini_scttr <-
+  ggplot(social_metrics, aes(x = hmn_dev_index, y = gini_index)) +
+  geom_point(aes(color = continent)) +
+  geom_smooth(method = "lm", se = FALSE) +
+  geom_label_repel(data = 
+                     social_metrics[social_metrics$country %in% countries, ],
+                   aes(label = country), size = 2.5) +
+  ggtitle("Human Development Index vs. Gini Index") +
+  labs(x = "Human Development Index", 
+       y = "Gini Index",
+       color = "Continent",
+       caption = "Figure 5") +
+  ladriano_theme
+
+# gini_bxplt
+# gini_hist
+
+grid.arrange(gini_bxplt, gini_hist, nrow = 2)
+gini_scttr
+```
+
+```{r, message = F, warning = F, echo = F, fig.align = "center"}
+# Statistical analysis of happiness index variable
+happiness_bxplt <-
+  ggplot(social_metrics, aes(x = happiness_index)) +
+  geom_boxplot() +
+  coord_flip() +
+  ggtitle("Global Happines Index") +
+  labs(x = "Happiness Index",
+       caption = "Figure 6") +
+  ladriano_theme
+
+happiness_hist <-
+  ggplot(social_metrics, aes(x = happiness_index)) +
+  geom_histogram(bins = 20,
+                 fill = "#DBDBDB",
+                 color = "darkblue") +
+  ggtitle("Global Happiness Index") +
+  labs(x = "Human Development Index",
+       y = "Count",
+       caption = "Figure 7") +
+  ladriano_theme
+
+happiness_scttr <-
+  ggplot(social_metrics, aes(x = hmn_dev_index, y = happiness_index)) +
+  geom_point(aes(color = continent)) +
+  geom_smooth(method = "lm", se = FALSE) +
+  geom_label_repel(data = 
+                     social_metrics[social_metrics$country %in% countries, ],
+                   aes(label = country), size = 2) +
+  ggtitle("Human Development Index vs. Happines Index") +
+  labs(x = "Human Development Index", 
+       y = "Happines Index",
+       color = "Continent",
+       caption = "Figure 8") +
+  ladriano_theme
+
+# happiness_bxplt
+# happiness_hist
+
+grid.arrange(happiness_bxplt, happiness_hist, nrow = 2)
+happiness_scttr
+```
+
+```{r, message = F, warning = F, echo = F, fig.align = "center"}
+# Statistical analysis of corruption index variable
+corruption_bxplt <-
+  ggplot(social_metrics, aes(x = corruption_index)) +
+  geom_boxplot() +
+  coord_flip() +
+  ggtitle("Global Corruption Perception Index") +
+  labs(x = "Corruption Index",
+       caption = "Figure 9") +
+  ladriano_theme
+
+corruption_hist <-
+  ggplot(social_metrics, aes(x = corruption_index)) +
+  geom_histogram(bins = 20,
+                 fill = "#DBDBDB",
+                 color = "darkblue") +
+  ggtitle("Global Corruption Perception Index") +
+  labs(x = "Corruption Perception Index",
+       y = "Count",
+       caption = "Figure 10") +
+  ladriano_theme
+
+corruption_scttr <-
+  ggplot(social_metrics, aes(x = hmn_dev_index, y = corruption_index)) +
+  geom_point(aes(color = continent)) +
+  geom_smooth(method = "lm", se = FALSE) +
+  geom_label_repel(data = 
+                     social_metrics[social_metrics$country %in% countries, ],
+                   aes(label = country), size = 2) +
+  ggtitle("Human Development Index vs. Corruption Index") +
+  labs(x = "Human Development Index", 
+       y = "Corruption Index",
+       color = "Continent",
+       caption = "Figure 11") +
+  ladriano_theme
+
+# corruption_bxplt
+# hmn_devcorruption_hist
+
+grid.arrange(corruption_bxplt, corruption_hist, nrow = 2)
+corruption_scttr
+```
+
+```{r, message = F, warning = F, echo = F}
+# Correlation matrix for human development index and other social metrics
+round(cor(social_metrics_num), 2)
+```
+
+```{r, message = F, warning = F, echo = F, fig.align = "center"}
+# Correlation plot for human development index and other social metrics
+plot(social_metrics_num)
+```
+
+
+### Linear Regression Model
+
+
+```{r, message = F, warning = F, output = "hide"}
+hmn_dev_lm <- lm(social_metrics, 
+                 formula = hmn_dev_index ~ gini_index + happiness_index)
+```
+
+
+### Results
+
+
+```{r, message = F, warning = F}
+# Summary of model
+summary(hmn_dev_lm)
+stargazer(hmn_dev_lm, 
+          type = "text", 
+          title="Descriptive statistics", 
+          out="table1.txt")
+```
+
+```{r, message = F, warning = F}
+# Diagnostic plots for model
+autoplot(hmn_dev_lm) +
+  ladriano_theme
+```
+
+
+
+
+
+
+
+
